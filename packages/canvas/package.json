@@ -1,0 +1,43 @@
+{
+  "name": "@cycle/canvas",
+  "version": "0.1.0",
+  "description": "Cycle - canvas",
+  "homepage": "https://github.com/yarden-livnat/cycle-canvas",
+  "bugs": {
+    "url": "https://github.com/jyarden-livnat/cycle/issues"
+  },
+  "license": "BSD-3-Clause",
+  "author": "Yarden Livnat",
+  "files": [
+    "lib/*.d.ts",
+    "lib/*.js.map",
+    "lib/*.js",
+    "style/*.css"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yarden-livnat/cycle-canvas.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf lib",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@jupyterlab/application": "^0.11.1",
+    "@phosphor/dragdrop": "^1.3.0",
+    "@phosphor/messaging": "^1.2.2",
+    "@phosphor/widgets": "^1.5.0",
+    "@types/d3": "^4.11.0",
+    "d3": "^4.11.0"
+  },
+  "devDependencies": {
+    "rimraf": "^2.5.2",
+    "typescript": "^2.7.0-dev.20171027"
+  }
+}
