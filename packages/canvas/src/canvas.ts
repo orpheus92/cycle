@@ -1,4 +1,8 @@
 import {
+    ServerConnection
+} from '@jupyterlab/services';
+
+import {
   Message
 } from '@phosphor/messaging';
 
@@ -14,6 +18,8 @@ import {
   Drag, IDragEvent
 } from '@phosphor/dragdrop';
 
+import '../style/index.css';
+
 import * as d3 from 'd3';
 import {event as d3event} from 'd3';
 
@@ -24,11 +30,26 @@ class CycleCanvas extends Widget {
   constructor() {
     super();
 
+    this.settings = ServerConnection.makeSettings();
+
     console.log('new CycleCanvas');
     this.id = 'cyclus-canvas';
     this.title.label = 'canvas';;
     this.title.closable = true;
     this.addClass('cyclus-canvas');
+
+    // See if we can put image in the middle
+      this.img = document.createElement('img');
+      this.img.className = 'jp-xkcdCartoon';
+      this.node.appendChild(this.img);
+
+      this.img.insertAdjacentHTML('afterend',
+          `<div class="jp-xkcdAttribution">
+        <a href="https://creativecommons.org/licenses/by-nc/2.5/" class="jp-xkcdAttribution" target="_blank">
+          <img src="https://licensebuttons.net/l/by-nc/2.5/80x15.png" />
+        </a>
+      </div>`
+      );
 
     d3.select(this.node)
       .on('p-dragenter', this.dragEnter)
@@ -75,16 +96,37 @@ class CycleCanvas extends Widget {
     }
     event.dropAction = 'copy';
     let items : [nbformat.ICell]= event.mimeData.getData(JUPYTER_CELL_MIME);
-    console.log('items:', items);
+    console.log('items:', items); //print dragged item
     for (let item of items) {
       if (item.cell_type == 'code') {
-        console.log('code:', item);
+        console.log('code:', item);  //print dragged code
       }
     }
     //let widgets = event.mimeData.getData('internal:cells');
   }
 
     // let values = event.mimeData.getData(JUPYTER_CELL_MIME);
+
+    /**
+     * The server settings associated with the widget.
+     */
+    readonly settings: ServerConnection.ISettings;
+
+    /**
+     * The image element associated with the widget.
+     */
+    readonly img: HTMLImageElement;
+
+    /**
+     * Handle update requests for the widget.
+     */
+    onUpdateRequest(msg: Message): void {
+        ServerConnection.makeRequest({url: 'https://egszlpbmle.execute-api.us-east-1.amazonaws.com/prod'}, this.settings).then(response => {
+            this.img.src = response.data.img;
+            this.img.alt = response.data.title;
+            this.img.title = response.data.alt;
+        });
+    }
 }
 
 class

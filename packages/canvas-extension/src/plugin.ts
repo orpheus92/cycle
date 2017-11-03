@@ -31,6 +31,7 @@ import {
   Manager, CycleCanvas
 } from '@cycle/canvas';
 
+
 export
 const ICycleCanvasExtension = new Token<ICycleCanvasExtension>('cycle.extension.canvas');
 
@@ -56,7 +57,8 @@ class CycleCanvasExtension implements ICycleCanvasExtension {
   }
 
   addCanvasButton(panel: NotebookPanel, context: DocumentRegistry.IContext<INotebookModel>) {
-    let callback = () => { this.showCanvas(); }
+    let callback = () => {console.log('canvas button clicked');
+      this.showCanvas(); }
 
     let button = new ToolbarButton({
        className: 'cycle-notebook-canvas-button',
@@ -75,7 +77,9 @@ class CycleCanvasExtension implements ICycleCanvasExtension {
   }
 
   showCanvas() {
+    //canvas represents the new widget
     let canvas = this._canvas = this._canvas || new CycleCanvas();
+    canvas.update();
     if (!canvas.isAttached) {
       this._app.shell.addToMainArea(canvas);
     }
